@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategoryController!{% endblock %}
+
+{% block body %}
+
+{% for flash in app.flashes('success') %}
+    {{ flash }}
+{% endfor %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for category in categories %}
+        <tr>
+            <th scope="row">{{category.id}}</th>
+            <td>{{category.title}}</td>
+            <td><a href="{{ path('app_category_update', {'id' : category.id}) }}">Modifier</a></td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

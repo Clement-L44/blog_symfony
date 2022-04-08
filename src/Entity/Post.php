@@ -36,9 +36,13 @@ class Post
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'post')]
     private $categories;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
+    private $user;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->user = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,4 +148,17 @@ class Post
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }

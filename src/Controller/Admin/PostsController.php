@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Post;
 use App\Form\PostType;
@@ -12,55 +12,26 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-class PostController extends AbstractController
+#[Route('/admin')]
+#[IsGranted('ROLE_ADMIN')]
+class PostsController extends AbstractController
 {
-    #[Route('/post', name: 'app_post')]
+    #[Route('/posts', name: 'admin_posts')]
     public function index(PostRepository $postRepository): Response
     {
-        $user = $this->getUser();
-        $posts = $postRepository->findBy(['user' => $user]);
-        //dd($posts);
-        return $this->render('post/index.html.twig', [
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User essaye d\'accéder à une page avec un rôle non attribué !');
+        $posts = $postRepository->findAll();
+        return $this->render('admin/posts/index.html.twig', [
             'posts' => $posts,
         ]);
     }
 
-    #[Route('/post/new', name: 'app_post_new')]
-    public function new(Request $request, ManagerRegistry $doctrine, Slug $slug): Response
-    {
-        $user = $this->getUser();
-        $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-            $em = $doctrine->getManager();
-            $post->setUser($user);
-            $post->setDateCreate(new DateTime('now'));
-            $post->setSlug($slug->createSlug($post->getTitle(), '-'));
-            foreach($post->getCategories()->getValues() as $category){
-                $post->addCategory($category);
-            }
-            //dd($post);
-            $em->persist($post);
-            $em->flush();
-
-            $this->addFlash(
-                'success',
-                'Post enregistré !'  
-            );
-        }
-
-        return $this->render('post/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/post/{id}', name: 'app_post_update', requirements: ['id' => '\d+'])]
+    #[Route('/post/{id}', name: 'admin_posts_update', requirements: ['id' => '\d+'])]
     public function update($id, Request $request, ManagerRegistry $doctrine, PostRepository $postRepository): Response
     {
-
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User essaye d\'accéder à une page avec un rôle non attribué !');
         $post = $postRepository->find($id);
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
@@ -75,17 +46,18 @@ class PostController extends AbstractController
                 'Le post a été modifié !'
             );
 
-            return $this->redirectToRoute('app_post');
+            return $this->redirectToRoute('admin_posts');
         }
 
-        return $this->render('post/update.html.twig', [
+        return $this->render('posts/update.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/post/remove/{id}', name: 'app_post_remove', requirements: ['id' => '\d+'])]
+    #[Route('/posts/remove/{id}', name: 'admin_posts_remove', requirements: ['id' => '\d+'])]
     public function remove($id, PostRepository $postRepository, Request $request, ManagerRegistry $doctrine): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User essaye d\'accéder à une page avec un rôle non attribué !');
         $post = $postRepository->find($id);
         $em = $doctrine->getManager();
 
@@ -103,6 +75,6 @@ class PostController extends AbstractController
             'Le post a été supprimé !'
         );
 
-        return $this->redirectToRoute('app_post');
+        return $this->redirectToRoute('admin_posts');
     }
 }

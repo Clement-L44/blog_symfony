@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PostController!{% endblock %}
+{% block title %}Admin !{% endblock %}
 
 {% block body %}
 
-    {% for flash in app.flashes('success') %}
-        {{ flash }}
-    {% endfor %}
+{% for flash in app.flashes('success') %}
+    {{ flash }}
+{% endfor %}
 
 <table class="table">
   <thead>

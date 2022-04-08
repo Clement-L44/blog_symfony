@@ -2,8 +2,21 @@
 
 {% block title %}Hello UserController!{% endblock %}
 
-{% block body %}
+{% block main %}
 
-    {{ form(form) }}
+    {% for flash in app.flashes('success') %}
+        {{ flash }}
+    {% endfor %}
+
+    {{ form_start(form) }}
+
+        {{ form_row(form.name) }}
+        {{ form_row(form.lastname) }}
+        {{ form_row(form.birthday) }}
+        {{ form_row(form.email) }}
+        <label>Réinitialiser mon mot de passe :</label><a href="/reset-password"> Réinitialiser</a>
+        {{ form_row(form.submit) }}
+
+    {{ form_end(form) }}
 
 {% endblock %}

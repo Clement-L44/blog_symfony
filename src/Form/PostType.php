@@ -8,12 +8,14 @@ use Doctrine\Common\Collections\Collection;
 use PHPUnit\Util\TestDox\TextResultPrinter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class PostType extends AbstractType
 {
@@ -26,9 +28,20 @@ class PostType extends AbstractType
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu'
             ])
-            ->add('image', UrlType::class,[
+            ->add('image', FileType::class,[
                 'label' => 'Enregistrer une image',
                 'required' => false,
+                'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '10054k',
+                        "mimeTypes" => [
+                            'image/jpeg',
+                            'image/png'
+                        ],
+                        'mimeTypesMessage' => "Please upload a valid image",
+                    ])
+                ]
             ])
             ->add('categories', EntityType::class, [
                 'class' => Category::class,

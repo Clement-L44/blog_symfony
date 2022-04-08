@@ -23,7 +23,14 @@ class UserController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
             $em = $doctrine->getManager();
-            dd($user);
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Les informations ont été enregistrées !'
+            );
+
         }
 
         return $this->render('user/index.html.twig', [

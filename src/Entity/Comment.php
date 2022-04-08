@@ -15,87 +15,27 @@ class Comment
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\OneToMany(mappedBy: 'comment', targetEntity: Post::class)]
-    private $Post;
-
-    #[ORM\OneToMany(mappedBy: 'comment', targetEntity: User::class)]
-    private $user;
-
     #[ORM\Column(type: 'text')]
     private $content;
 
     #[ORM\Column(type: 'datetime')]
     private $date_create;
 
+    #[ORM\ManyToOne(targetEntity: Post::class, inversedBy: 'comments')]
+    private $post;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
+    private $user;
+
     public function __construct()
     {
-        $this->Post = new ArrayCollection();
+        $this->post = new ArrayCollection();
         $this->user = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection<int, Post>
-     */
-    public function getPost(): Collection
-    {
-        return $this->Post;
-    }
-
-    public function addPost(Post $post): self
-    {
-        if (!$this->Post->contains($post)) {
-            $this->Post[] = $post;
-            $post->setComment($this);
-        }
-
-        return $this;
-    }
-
-    public function removePost(Post $post): self
-    {
-        if ($this->Post->removeElement($post)) {
-            // set the owning side to null (unless already changed)
-            if ($post->getComment() === $this) {
-                $post->setComment(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUser(): Collection
-    {
-        return $this->user;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->user->contains($user)) {
-            $this->user[] = $user;
-            $user->setComment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->user->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getComment() === $this) {
-                $user->setComment(null);
-            }
-        }
-
-        return $this;
     }
 
     public function getContent(): ?string
@@ -121,4 +61,29 @@ class Comment
 
         return $this;
     }
+
+    public function getPost(): ?Post
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Post $post): self
+    {
+        $this->post = $post;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }

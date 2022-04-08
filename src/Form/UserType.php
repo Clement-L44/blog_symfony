@@ -29,9 +29,6 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => "E-mail"
             ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe'
-            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider'
             ])

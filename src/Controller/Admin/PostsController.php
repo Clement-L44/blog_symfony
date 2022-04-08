@@ -28,7 +28,7 @@ class PostsController extends AbstractController
         ]);
     }
 
-    #[Route('/post/{id}', name: 'admin_posts_update', requirements: ['id' => '\d+'])]
+    #[Route('/posts/{id}', name: 'admin_posts_update', requirements: ['id' => '\d+'])]
     public function update($id, Request $request, ManagerRegistry $doctrine, PostRepository $postRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User essaye d\'accéder à une page avec un rôle non attribué !');
@@ -42,7 +42,7 @@ class PostsController extends AbstractController
             $em->flush();
 
             $this->addFlash(
-                'success',
+                'success',                
                 'Le post a été modifié !'
             );
 

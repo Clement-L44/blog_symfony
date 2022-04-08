@@ -2,7 +2,7 @@
 
 {% block title %}Admin !{% endblock %}
 
-{% block body %}
+{% block main %}
 
 {% for flash in app.flashes('success') %}
     {{ flash }}
@@ -15,7 +15,6 @@
       <th scope="col">Title</th>
       <th scope="col">Date de création</th>
       <th scope="col">Catégorie(s)</th>
-      <th scope="col">Url Image</th>
       <th scope="col">User</th>
       <th></th>
       <th></th>
@@ -32,10 +31,9 @@
                    {{ category.title }} -
                 {% endfor %}
             </td>
-            <td>{{ post.image }}</td>
             <td>{{ post.user.fullname }}</td>
-            <td><a href="{{ path('app_post_update', {'id' : post.id}) }}">Modifier</a></td>
-            <td><a href="{{ path('app_post_remove', {'id' : post.id}) }}">Supprimer</a></td>
+            <td><a href="{{ path('admin_posts_update', {'id' : post.id}) }}">Modifier</a></td>
+            <td><a href="{{ path('admin_posts_remove', {'id' : post.id}) }}">Supprimer</a></td>
         </tr>
     {% endfor %}
   </tbody>

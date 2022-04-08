@@ -68,7 +68,13 @@
                                 </li>
                             {% endfor %}
                         </ul>
-                      </li>  
+                      </li>
+
+                      {% if app.user %}  
+                        <li>
+                            <a href="{{ path("app_user") }}"><i class="fa-solid fa-user"></i></a>
+                        </li>
+                      {% endif %}
                     </ul>
                 </div>
             </div>

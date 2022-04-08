@@ -5,30 +5,28 @@
 {% block main %}
 
     <div class="content-post">
-
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.content }}</p>
-    <div class="content-categories" style="display:flex; flex-direction: row;">
-        {% for category in post.categories %}
-            <p>{{category.title}}-</p>
-        {% endfor %}
-    </div>
-    {% if post.comments %}
-        <div class="content-commentary">    
-            {% for comment in post.comments %}
-                <div class="comment{{comment.id}} commentary">
-                    <p>Commentaire : {{comment.content}}</p>
-                    <h4>{{comment.dateCreate|date('d/M/Y')}}</h4>
-                    <h5>Publié par {{ comment.user.fullname }}</h5>
-                    {% if app.user == comment.user %}
-                        <a href="{{path('app_post_comment_remove', {'id' : comment.id})}}">Supprimer</a>
-                    {% endif %}
-                </div>
+        <h1>{{ post.title }}</h1>
+        <img src="{{asset('media/posts/' ~ post.image)}}"/>
+        <div class="content-categories" style="display:flex; flex-direction: row;">
+            {% for category in post.categories %}
+                <p style="font-size: 12px;">{{category.title}}-</p>
             {% endfor %}
         </div>
-    {% endif %}
-
-
+        <p class="description" style="border-style: solid;">{{ post.content }}</p>
+        {% if post.comments %}
+            <div class="content-commentary">    
+                {% for comment in post.comments %}
+                    <div class="comment{{comment.id}} commentary">
+                        <p>Commentaire : {{comment.content}}</p>
+                        <h4>{{comment.dateCreate|date('d/M/Y')}}</h4>
+                        <h5>Publié par {{ comment.user.fullname }}</h5>
+                        {% if app.user == comment.user %}
+                            <a href="{{path('app_post_comment_remove', {'id' : comment.id})}}">Supprimer</a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     {{ form(form) }}
